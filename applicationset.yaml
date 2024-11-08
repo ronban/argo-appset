@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-apps
+spec:
+  generators:
+  - merge:
+      mergeKeys:
+        - metadata.labels.env
+        - path.basename
+      generators:
+      - matrix:
+          generators:
+          - clusters: {}
+          - git:
+              repoURL: &repo https://github.com/alexmt/kubecon-2024-us.git
+              directories:
+              - path: clusters/base/*
+      - merge:
+          mergeKeys:
+            - path
+          generators:
+          - git:
+              repoURL: *repo
+              revision: HEAD
+              files:
+              - path: clusters/groups/*/.env.yaml
+          - git:
+              repoURL: *repo
+              revision: HEAD
+              directories:
+              - path: clusters/groups/*/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: system
+      source:
+        repoURL: *repo
+        path: '{{path}}'
+      destination:
+        server: '{{server}}'
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
