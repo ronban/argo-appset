@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-bootstrap
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - merge:
+        mergeKeys:
+          - path
+        generators:
+          - matrix:
+              generators:
+                - clusters: {}
+                - git:
+                    repoURL: &repo https://github.com/ronban/argo-appset.git
+                    revision: HEAD
+                    directories:
+                      - path: bootstrap/commons/*
+          - matrix:
+              generators:
+                - clusters: {}
+                - git:
+                    repoURL: *repo
+                    revision: HEAD
+                    directories:
+                      - path: bootstrap/environments/{{metadata.labels.env}}/*
+  template:
+    metadata:
+      name: "bootstrap-commons-{{path.basename}}"
+    spec:
+      project: default
+      source:
+        repoURL: *repo
+        path: "{{path}}"
+      destination:
+        server: "{{server}}"
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
