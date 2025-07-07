@@ -12,14 +12,14 @@ spec:
               repoURL: &repo https://github.com/ronban/argo-appset.git
               revision: HEAD
               directories:
-                - path: cells/{{}}
+                - path: cells/*
               values:
                 files:
                   - path: cells.yaml
 
   template:
     metadata:
-      name: "{{ range .values.cells }}{{ .name }}{{ end }}"
+      name: "{{ .name }}"
     spec:
       project: default
       source:

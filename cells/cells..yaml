@@ -1,5 +1,6 @@
-elaradc-1:
-  region: us-west-2
-  platform: rancher
-  environment: test
-  tier: t4
+cells:
+  - name: cell-hidden-dragon
+    region: elara-dc
+    platform: rancher
+    environment: test
+    tier: t4
