@@ -1,0 +1,5 @@
+elaradc-1:
+  region: us-west-2
+  platform: rancher
+  environment: test
+  tier: t4

@@ -9,3 +9,6 @@ helmCharts:
     version: v1.18.2
     valuesFile: values.yaml
     includeCRDs: true
+
+resources:
+  - selfsigned.yaml

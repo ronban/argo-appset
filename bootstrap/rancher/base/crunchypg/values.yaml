@@ -1,7 +1,4 @@
-# Optional - create example cluster
 createExample: false
-
-# Resource limits
 resources:
   requests:
     memory: "256Mi"
@@ -9,4 +6,3 @@ resources:
   limits:
     memory: "512Mi"
     cpu: "500m"
-# TLS or Monitoring settings can be added here
