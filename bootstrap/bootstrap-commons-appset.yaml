@@ -17,26 +17,28 @@ spec:
                 - git:
                     repoURL: &repo https://github.com/ronban/argo-appset.git
                     revision: HEAD
-                    directories:
-                      - path: bootstrap/commons/*
+                    files:
+                      - path: bootstrap/commons/*/kustomization.yaml
+                      - path: bootstrap/commons/*/resources/*.yaml
           - matrix:
               generators:
                 - clusters: {}
                 - git:
                     repoURL: *repo
                     revision: HEAD
-                    directories:
-                      - path: bootstrap/environments/{{metadata.labels.env}}/*
+                    files:
+                      - path: bootstrap/environments/{{ index .metadata.labels "environment" }}/*/kustomization.yaml
+                      - path: bootstrap/environments/{{ index .metadata.labels "environment" }}/*/resources/*.yaml
   template:
     metadata:
-      name: "bootstrap-commons-{{path.basename}}"
+      name: "bootstrap-commons-{{.path.basename}}"
     spec:
       project: default
       source:
         repoURL: *repo
-        path: "{{path}}"
+        path: "{{.path.path}}"
       destination:
-        server: "{{server}}"
+        server: "{{.server}}"
         namespace: argocd
       syncPolicy:
         automated:
