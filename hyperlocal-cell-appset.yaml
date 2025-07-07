@@ -1,21 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cell-apps
+  name: elements-yaml
+  namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
-      generators:
-        - git:
-            repoURL: &repo https://github.com/argoproj/argo-cd.git
-            revision: HEAD
-            files:
-              - path: cells/cells.yaml
-        - list:
-            elementsYaml: "{{ .cells | toJson }}"
-
+        generators:
+          - git:
+              repoURL: &repo https://github.com/argoproj/argo-cd.git
+              revision: HEAD
+              files:
+                - path: cells/cells.yaml
+          - list:
+              elementsYaml: "{{ .cells | toJson }}"
   template:
     metadata:
       name: "{{.name}}"
