@@ -4,31 +4,31 @@ metadata:
   name: cell-apps
 spec:
   goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
-        generators:
-          - clusters: {}
-          - git:
-              repoURL: &repo https://github.com/ronban/argo-appset.git
-              revision: HEAD
-              directories:
-                - path: cells/*
-              values:
-                files:
-                  - path: cells.yaml
+      generators:
+        - git:
+            repoURL: &repo https://github.com/argoproj/argo-cd.git
+            revision: HEAD
+            files:
+              - path: cells/cells.yaml
+        - list:
+            elementsYaml: "{{ .cells | toJson }}"
 
   template:
     metadata:
-      name: "{{ .name }}"
+      name: "{{.name}}"
     spec:
       project: default
-      source:
-        repoURL: https://github.com/your-org/your-repo.git
-        targetRevision: HEAD
-        path: "apps/{{ .name }}"
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: "{{ .name }}"
       syncPolicy:
         automated:
-          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      sources:
+        - repoURL: *repo
+          targetRevision: HEAD
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{.platform}}-{{.environment}}-{{.name}}"
