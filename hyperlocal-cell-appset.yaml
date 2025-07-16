@@ -5,30 +5,49 @@ metadata:
   namespace: argocd
 spec:
   goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
-          - git:
-              repoURL: &repo https://github.com/argoproj/argo-cd.git
-              revision: HEAD
-              files:
-                - path: cells/cells.yaml
-          - list:
-              elementsYaml: "{{ .cells | toJson }}"
+          - matrix:
+              generators:
+                - git:
+                    repoURL: &repo https://github.com/ronban/argo-appset.git
+                    revision: HEAD
+                    files:
+                      - path: cells/cells.yaml
+                - list:
+                    elementsYaml: "{{ .cells | toJson }}"
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: region
+                    operator: In
+                    values:
+                      - "{{ .region }}"
+                  - key: platform
+                    operator: In
+                    values:
+                      - "{{ .platform }}"
+                  - key: environment
+                    operator: In
+                    values:
+                      - "{{ .environment }}"
+                  - key: tier
+                    operator: In
+                    values:
+                      - "{{ .tier }}"
   template:
     metadata:
-      name: "{{.name}}"
+      name: "{{ .name }}-{{ .path.basename }}"
     spec:
       project: default
+      source:
+        repoURL: *repo
+        targetRevision: HEAD
+        path: "{{ .path.path }}"
+      destination:
+        name: "{{ .name }}-matched-cluster" # will be overridden by matched cluster
+        namespace: "{{ .name }}"
       syncPolicy:
         automated:
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-      sources:
-        - repoURL: *repo
-          targetRevision: HEAD
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: "{{.platform}}-{{.environment}}-{{.name}}"
+          prune: true

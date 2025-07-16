@@ -4,3 +4,9 @@ cells:
     platform: rancher
     environment: test
     tier: t4
+
+  - name: cell-crouching-tiger
+    region: elara-dc
+    platform: rancher
+    environment: test
+    tier: t4
