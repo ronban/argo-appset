@@ -13,24 +13,29 @@ spec:
               revision: HEAD
               files:
                 - path: cells/*/*/*/kustomization.yaml
-          - git:
-              repoURL: &repo https://github.com/ronban/argo-appset.git
-              revision: HEAD
-              files:
-                - path: cells/cells.yaml
+              values:
+                cellName: "{{ index .path.segments 1 }}"
+          - matrix:
+              generators:
+                - git:
+                    repoURL: *repo
+                    revision: HEAD
+                    files:
+                      - path: cells/{{ .values.cellName }}/cell.json
+                - clusters: {}
 
   template:
     metadata:
-      name: "{{ index .path.segments 1 }}-{{ index .path.segments 2 }}-{{ index .path.segments 3 }}"
+      name: "{{ .values.cellName }}-{{ .path.basename }}"
     spec:
       project: default
       source:
         repoURL: *repo
         targetRevision: HEAD
-        path: "cells/{{ .name }}/overlay/{{ .name }}"
+        path: "{{ .path.path }}/kustomization.yaml"
       destination:
-        name: "{{ .name }}" # will be overridden by matched cluster
-        namespace: "{{ .name }}-{{ .name }}"
+        name: "{{ .path.basename }}" # will be overridden by matched cluster
+
       syncPolicy:
         automated:
           prune: true

@@ -7,6 +7,6 @@ cells:
 
   - name: cell-crouching-tiger
     region: elara-dc
-    platform: rancher
+    platform: eks
     environment: test
     tier: t4
