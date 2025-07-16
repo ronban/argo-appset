@@ -8,47 +8,20 @@ spec:
   generators:
     - matrix:
         generators:
-          - matrix:
-              generators:
-                - matrix:
-                    generators:
-                      - git:
-                          repoURL: &repo https://github.com/ronban/argo-appset.git
-                          revision: HEAD
-                          files:
-                            - path: cells/cells.yaml
-                      - list:
-                          elementsYaml: "{{ .cells | toJson }}"
-                - clusters:
-                    selector:
-                      matchExpressions:
-                        - key: region
-                          operator: In
-                          values:
-                            - "{{ .region }}"
-                        - key: platform
-                          operator: In
-                          values:
-                            - "{{ .platform }}"
-                        - key: environment
-                          operator: In
-                          values:
-                            - "{{ .environment }}"
-                        - key: tier
-                          operator: In
-                          values:
-                            - "{{ .tier }}"
-          - matrix:
-              generators:
-                - git:
-                    repoURL: *repo
-                    revision: HEAD
-                    directories:
-                      - path: cells/commons/*
-                      - path: cells/tenants/*/*
+          - git:
+              repoURL: &repo https://github.com/ronban/argo-appset.git
+              revision: HEAD
+              files:
+                - path: cells/*/tenants/*/*/kustomization.yaml
+          - git:
+              repoURL: &repo https://github.com/ronban/argo-appset.git
+              revision: HEAD
+              files:
+                - path: cells/cells.yaml
+
   template:
     metadata:
-      name: "{{ .name }}-{{ .name }}"
+      name: "{{ index .path.segments 1 }}-{{ index .path.segments 2 }}-{{ index .path.segments 3 }}"
     spec:
       project: default
       source:
