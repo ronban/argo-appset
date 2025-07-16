@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/hcp
+  - ../../base/hap
+  - ../../base/hdb
+  - ../../base/hgw
+  - ../../base/hkf
+  - ../../base/hux
+
+namePrefix: tenant-1-
+
+commonLabels:
+  tenant: tenant-1
+  cell: cell-crouching-tiger
+
+patchesStrategicMerge:
+  - patches/hcp-patch.yaml
+  - patches/hap-patch.yaml
