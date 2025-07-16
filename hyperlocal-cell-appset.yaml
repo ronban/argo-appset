@@ -12,7 +12,7 @@ spec:
               repoURL: &repo https://github.com/ronban/argo-appset.git
               revision: HEAD
               files:
-                - path: cells/*/tenants/*/*/kustomization.yaml
+                - path: cells/*/*/*/kustomization.yaml
           - git:
               repoURL: &repo https://github.com/ronban/argo-appset.git
               revision: HEAD
