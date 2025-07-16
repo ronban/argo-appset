@@ -1,7 +1,6 @@
 {
-    "name": "cell-crouching-tiger",
     "region": "elara-dc",
-    "platform": "eks",
+    "platform": "rancher",
     "environment": "test",
     "tier": "t4"
 }
