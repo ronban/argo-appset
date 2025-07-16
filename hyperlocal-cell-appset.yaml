@@ -12,21 +12,30 @@ spec:
               repoURL: &repo https://github.com/ronban/argo-appset.git
               revision: HEAD
               files:
-                - path: cells/*/*/*/kustomization.yaml
-              values:
-                cellName: "{{ index .path.segments 1 }}"
-          - matrix:
-              generators:
-                - git:
-                    repoURL: *repo
-                    revision: HEAD
-                    files:
-                      - path: cells/{{ .values.cellName }}/cell.json
-                - clusters: {}
+                - path: cells/cell-hidden-dragon/cell.json
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: region
+                    operator: In
+                    values:
+                      - "{{ .region }}"
+                  - key: platform
+                    operator: In
+                    values:
+                      - "{{ .platform }}"
+                  - key: environment
+                    operator: In
+                    values:
+                      - "{{ .environment }}"
+                  - key: tier
+                    operator: In
+                    values:
+                      - "{{ .tier }}"
 
   template:
     metadata:
-      name: "{{ .values.cellName }}-{{ .path.basename }}"
+      name: "{{ .region }}"
     spec:
       project: default
       source:

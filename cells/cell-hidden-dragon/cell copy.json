@@ -1,0 +1,7 @@
+{
+    "name": "cell-crouching-tiger",
+    "region": "elara-dc",
+    "platform": "eks",
+    "environment": "test",
+    "tier": "t4"
+}
