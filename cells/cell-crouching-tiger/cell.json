@@ -2,5 +2,6 @@
     "region": "elara-dc",
     "platform": "rancher",
     "environment": "test",
-    "tier": "t4"
+    "tier": "t4",
+    "slug": "crouching-tiger"
 }

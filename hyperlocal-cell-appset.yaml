@@ -29,6 +29,7 @@ spec:
                       platform: "{{ .platform }}"
                       environment: "{{ .environment }}"
                       tier: "{{ .tier }}"
+                      slug: "{{ .slug }}"
           - clusters:
               selector:
                 matchExpressions:
@@ -59,7 +60,8 @@ spec:
         path: "{{ .path.path }}/kustomization.yaml"
       destination:
         name: "{{ .server }}" # will be overridden by matched cluster
-
+        server: "{{ .server }}"
+        namespace: "{{ .values.cell }}-{{ .values.tenant }}-{{ .values.module }}"
       syncPolicy:
         automated:
           prune: true
