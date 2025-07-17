@@ -13,8 +13,8 @@ spec:
                 - git:
                     repoURL: &repo https://github.com/ronban/argo-appset.git
                     revision: HEAD
-                    files:
-                      - path: "cells/*/*/*/kustomization.yaml"
+                    directories:
+                      - path: "cells/*/*/*"
                     values:
                       cell: "{{ index .path.segments 1 }}"
                       tenant: "{{ index .path.segments 2 }}"
@@ -55,9 +55,17 @@ spec:
     spec:
       project: default
       source:
-        repoURL: *repo
-        targetRevision: HEAD
-        path: "{{ .path.path }}/kustomization.yaml"
+        chart: "{{ .values.module }}"
+        repoURL: "oci://c.wlabs.cloud/hyperlocal-helms"
+        targetRevision: 1.0.0 # or "latest"
+        helm:
+          valueFiles:
+            - cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/values.yaml
+          values: |
+            region: {{ .values.region }}
+            tier: {{ .values.tier }}
+            environment: {{ .values.environment }}
+            platform: {{ .values.platform }}
       destination:
         name: "{{ .server }}" # will be overridden by matched cluster
         server: "{{ .server }}"
