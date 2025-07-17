@@ -8,11 +8,27 @@ spec:
   generators:
     - matrix:
         generators:
-          - git:
-              repoURL: &repo https://github.com/ronban/argo-appset.git
-              revision: HEAD
-              files:
-                - path: cells/cell-hidden-dragon/cell.json
+          - matrix:
+              generators:
+                - git:
+                    repoURL: &repo https://github.com/ronban/argo-appset.git
+                    revision: HEAD
+                    files:
+                      - path: "cells/*/*/*/kustomization.yaml"
+                    values:
+                      cell: "{{ index .path.segments 1 }}"
+                      tenant: "{{ index .path.segments 2 }}"
+                      module: "{{ index .path.segments 3 }}"
+                - git:
+                    repoURL: &repo https://github.com/ronban/argo-appset.git
+                    revision: HEAD
+                    files:
+                      - path: "cells/{{ .values.cell }}/cell.json"
+                    values:
+                      region: "{{ .region }}"
+                      platform: "{{ .platform }}"
+                      environment: "{{ .environment }}"
+                      tier: "{{ .tier }}"
           - clusters:
               selector:
                 matchExpressions:
@@ -32,10 +48,9 @@ spec:
                     operator: In
                     values:
                       - "{{ .tier }}"
-
   template:
     metadata:
-      name: "{{ .region }}"
+      name: "{{ .values.cell }}-{{ .values.tenant }}-{{ .values.module }}"
     spec:
       project: default
       source:
@@ -43,7 +58,7 @@ spec:
         targetRevision: HEAD
         path: "{{ .path.path }}/kustomization.yaml"
       destination:
-        name: "{{ .path.basename }}" # will be overridden by matched cluster
+        name: "{{ .server }}" # will be overridden by matched cluster
 
       syncPolicy:
         automated:
