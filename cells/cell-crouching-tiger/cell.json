@@ -3,5 +3,9 @@
     "platform": "rancher",
     "environment": "test",
     "tier": "t4",
-    "slug": "elara-dc-rancher-test-t4"
+    "slug": "elara-dc-rancher-test-t4",
+    "versions": {
+        "authplane": "v1.0.0",
+        "controlplane-core": "v1.0.0"
+    }
 }

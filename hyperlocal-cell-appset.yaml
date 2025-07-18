@@ -15,12 +15,15 @@ spec:
                     revision: HEAD
                     directories:
                       - path: "cells/*/*/*"
+                    files:
+                      - path: "cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/version.txt"
                     values:
                       cell: "{{ index .path.segments 1 }}"
                       tenant: "{{ index .path.segments 2 }}"
                       module: "{{ index .path.segments 3 }}"
+
                 - git:
-                    repoURL: &repo https://github.com/ronban/argo-appset.git
+                    repoURL: *repo
                     revision: HEAD
                     files:
                       - path: "cells/{{ .values.cell }}/cell.json"
@@ -30,6 +33,7 @@ spec:
                       environment: "{{ .environment }}"
                       tier: "{{ .tier }}"
                       slug: "{{ .slug }}"
+                      versions: "{{ .versions }}"
           - clusters:
               selector:
                 matchExpressions:
@@ -57,7 +61,7 @@ spec:
       source:
         chart: "{{ .values.module }}"
         repoURL: "oci://c.wlabs.cloud/hyperlocal-helms"
-        targetRevision: 1.0.0 # or "latest"
+        targetRevision: '{{ index .values.versions .values.module | default "latest" }}'
         helm:
           valueFiles:
             - cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/values.yaml
@@ -66,8 +70,11 @@ spec:
             tier: {{ .values.tier }}
             environment: {{ .values.environment }}
             platform: {{ .values.platform }}
+            slug: {{ .values.slug }}
+            cell: {{ .values.cell }}
+            tenant: {{ .values.tenant }}
       destination:
-        name: "{{ .server }}" # will be overridden by matched cluster
+        name: "{{ .name }}"
         server: "{{ .server }}"
         namespace: "{{ .values.cell }}-{{ .values.tenant }}-{{ .values.module }}"
       syncPolicy:
