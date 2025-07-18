@@ -15,8 +15,6 @@ spec:
                     revision: HEAD
                     directories:
                       - path: "cells/*/*/*"
-                    files:
-                      - path: "cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/version.txt"
                     values:
                       cell: "{{ index .path.segments 1 }}"
                       tenant: "{{ index .path.segments 2 }}"
@@ -28,12 +26,7 @@ spec:
                     files:
                       - path: "cells/{{ .values.cell }}/cell.json"
                     values:
-                      region: "{{ .region }}"
-                      platform: "{{ .platform }}"
-                      environment: "{{ .environment }}"
-                      tier: "{{ .tier }}"
-                      slug: "{{ .slug }}"
-                      versions: "{{ .versions }}"
+
           - clusters:
               selector:
                 matchExpressions:
@@ -55,13 +48,13 @@ spec:
                       - "{{ .tier }}"
   template:
     metadata:
-      name: "{{ .values.cell }}-{{ .values.tenant }}-{{ .values.module }}"
+      name: "{{ . }}"
     spec:
       project: default
       source:
         chart: "{{ .values.module }}"
         repoURL: "oci://c.wlabs.cloud/hyperlocal-helms"
-        targetRevision: '{{ index .values.versions .values.module | default "latest" }}'
+        targetRevision: "{{ .values.versions }}"
         helm:
           valueFiles:
             - cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/values.yaml
