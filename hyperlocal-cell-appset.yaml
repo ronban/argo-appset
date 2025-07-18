@@ -48,24 +48,24 @@ spec:
                       - "{{ .cellSpec.tier }}"
   template:
     metadata:
-      name: "{{ . }}"
+      name: "{{ .values.cell }}-{{ .values.tenant }}-{{ .values.module }}"
     spec:
       project: default
       source:
-        chart: "{{ .values.module }}"
-        repoURL: "oci://c.wlabs.cloud/hyperlocal-helms"
-        targetRevision: "{{  index .cellPackVersions authplane }}"
+        chart: "hyperlocal-{{ .values.module }}-helm"
+        repoURL: "c.wlabs.cloud/hyperlocal-helms"
+        targetRevision: '{{ index .cellPackVersions .values.module | default "latest" }}'
         helm:
           valueFiles:
             - cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/values.yaml
-          values: |
-            region: {{ .values.region }}
-            tier: {{ .values.tier }}
-            environment: {{ .values.environment }}
-            platform: {{ .values.platform }}
-            slug: {{ .values.slug }}
-            cell: {{ .values.cell }}
-            tenant: {{ .values.tenant }}
+          valuesObject:
+            region: "{{ .cellSpec.region }}"
+            tier: "{{ .cellSpec.tier }}"
+            environment: "{{ .cellSpec.environment }}"
+            platform: "{{ .cellSpec.platform }}"
+            slug: "{{ .cellSpec.slug }}"
+            cell: "{{ .values.cell }}"
+            tenant: "{{ .values.tenant }}"
       destination:
         name: "{{ .name }}"
         server: "{{ .server }}"
