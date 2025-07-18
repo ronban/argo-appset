@@ -27,7 +27,25 @@ spec:
                       - path: "cells/{{ .values.cell }}/cell.json"
                     values:
 
-          - clusters: {}
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: region
+                    operator: In
+                    values:
+                      - "{{ .cellSpec.region }}"
+                  - key: platform
+                    operator: In
+                    values:
+                      - "{{ .cellSpec.platform }}"
+                  - key: environment
+                    operator: In
+                    values:
+                      - "{{ .cellSpec.environment }}"
+                  - key: tier
+                    operator: In
+                    values:
+                      - "{{ .cellSpec.tier }}"
   template:
     metadata:
       name: "{{ . }}"
@@ -36,7 +54,7 @@ spec:
       source:
         chart: "{{ .values.module }}"
         repoURL: "oci://c.wlabs.cloud/hyperlocal-helms"
-        targetRevision: ""
+        targetRevision: "{{  index .cellPackVersions authplane }}"
         helm:
           valueFiles:
             - cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/values.yaml

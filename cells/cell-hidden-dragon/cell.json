@@ -8,11 +8,11 @@
         "updatedAt": "2023-10-01T00:00:00Z"
     },
     "cellSpec": {
-        "region": "us-west-1",
+        "region": "elara-dc",
         "platform": "rancher",
-        "environment": "production",
-        "tier": "standard",
-        "slug": "crouching-tiger-standard"
+        "environment": "test",
+        "tier": "t4",
+        "slug": "crouching-tiger"
     },
     "cellPackVersions": {
         "authplane": "v1.0.0",
