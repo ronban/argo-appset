@@ -9,7 +9,7 @@
     },
     "cellSpec": {
         "region": "us-west-1",
-        "platform": "kubernetes",
+        "platform": "eks",
         "environment": "production",
         "tier": "standard",
         "slug": "crouching-tiger-standard"
