@@ -1,6 +1,21 @@
 {
-    "region": "elara-dc",
-    "platform": "eks",
-    "environment": "test",
-    "tier": "t4"
+    "cellMetadata": {
+        "name": "hidden-dragon",
+        "description": "A cell for testing purposes",
+        "icon": "tiger",
+        "version": "v1.0.0",
+        "createdAt": "2023-10-01T00:00:00Z",
+        "updatedAt": "2023-10-01T00:00:00Z"
+    },
+    "cellSpec": {
+        "region": "us-west-1",
+        "platform": "kubernetes",
+        "environment": "production",
+        "tier": "standard",
+        "slug": "crouching-tiger-standard"
+    },
+    "cellPackVersions": {
+        "authplane": "v1.0.0",
+        "controlplane-core": "v1.0.0"
+    }
 }

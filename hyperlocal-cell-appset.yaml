@@ -27,25 +27,7 @@ spec:
                       - path: "cells/{{ .values.cell }}/cell.json"
                     values:
 
-          - clusters:
-              selector:
-                matchExpressions:
-                  - key: region
-                    operator: In
-                    values:
-                      - "{{ .region }}"
-                  - key: platform
-                    operator: In
-                    values:
-                      - "{{ .platform }}"
-                  - key: environment
-                    operator: In
-                    values:
-                      - "{{ .environment }}"
-                  - key: tier
-                    operator: In
-                    values:
-                      - "{{ .tier }}"
+          - clusters: {}
   template:
     metadata:
       name: "{{ . }}"
@@ -54,7 +36,7 @@ spec:
       source:
         chart: "{{ .values.module }}"
         repoURL: "oci://c.wlabs.cloud/hyperlocal-helms"
-        targetRevision: "{{ .values.versions }}"
+        targetRevision: ""
         helm:
           valueFiles:
             - cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/values.yaml
