@@ -1,6 +1,6 @@
 {
     "cellMetadata": {
-        "name": "crouching-tiger",
+        "name": "c-t",
         "description": "A cell for testing purposes",
         "icon": "tiger",
         "version": "v1.0.0",
@@ -9,10 +9,10 @@
     },
     "cellSpec": {
         "region": "us-west-1",
-        "platform": "eks",
-        "environment": "production",
-        "tier": "standard",
-        "slug": "crouching-tiger-standard"
+        "platform": "rancher",
+        "environment": "test",
+        "tier": "t4",
+        "slug": "cts"
     },
     "cellPacks": {
         "hap": {
@@ -24,8 +24,6 @@
             "targetRevision": "v1.0.0",
             "repoURL": "c.wlabs.cloud/hyperlocal-helms",
             "chart": "hyperlocal-crouching-tiger-controlplane-helm"
-        },
-        "authplane": "v1.0.0",
-        "controlplane-core": "v1.0.0"
+        }
     }
 }

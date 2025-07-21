@@ -52,9 +52,9 @@ spec:
     spec:
       project: default
       source:
-        chart: "hyperlocal-{{ .values.module }}-helm"
-        repoURL: '{{ index (index .cellPackVersions .values.module) "chartURL" }}'
-        targetRevision: '{{ index .cellPackVersions .values.module | default "latest" }}'
+        chart: '{{ index (index .cellPackVersions .values.module) "chart" }}'
+        repoURL: '{{ index (index .cellPackVersions .values.module) "repoURL" }}'
+        targetRevision: '{{ index (index .cellPackVersions .values.module) "targetRevision" | default "latest" }}'
         helm:
           valueFiles:
             - cells/{{ .values.cell }}/{{ .values.tenant }}/{{ .values.module }}/values.yaml?
