@@ -8,7 +8,7 @@
         "updatedAt": "2023-10-01T00:00:00Z"
     },
     "cellSpec": {
-        "region": "us-west-1",
+        "region": "elara-dc",
         "platform": "rancher",
         "environment": "test",
         "tier": "t4",

@@ -14,7 +14,7 @@ spec:
                     repoURL: &repo https://github.com/ronban/argo-appset.git
                     revision: HEAD
                     directories:
-                      - path: "cells/*/*/*"
+                      - path: "cells-test/*/*/*"
                     values:
                       cell: "{{ index .path.segments 1 }}"
                       tenant: "{{ index .path.segments 2 }}"
@@ -24,7 +24,7 @@ spec:
                     repoURL: *repo
                     revision: HEAD
                     files:
-                      - path: "cells/{{ .values.cell }}/cell.json"
+                      - path: "cells-test/{{ .values.cell }}/cell.json"
                     values:
 
           - clusters:
